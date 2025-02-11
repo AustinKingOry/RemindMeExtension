@@ -1,7 +1,7 @@
 {
     "name": "Tasks Reminder",
     "version": "0.1.0",
-    "descrption": "Create tasks and get notified when it's time!",
+    "description": "Create tasks and get notified when it's time!",
     "permissions": ["storage", "notifications", "alarms"],
     "host_permissions": ["<all_urls>"],
     "background": {
