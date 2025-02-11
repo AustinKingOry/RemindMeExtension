@@ -5,7 +5,7 @@
     "permissions": ["storage", "notifications", "alarms"],
     "host_permissions": ["<all_urls>"],
     "background": {
-        "service_worker": "src/background.js"
+        "service_worker": "background.js"
     },
     "web_accessible_resources": [
         {
