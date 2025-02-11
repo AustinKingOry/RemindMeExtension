@@ -17,7 +17,8 @@ chrome.alarms.onAlarm.addListener(async function (alarm) {
         iconUrl: "icons/icon128.png",
         title: "Task Reminder",
         message: `Time for: ${alarm.name}`,
-        priority: 2
+        priority: 2,
+        silent: true
     });
 
      // Keep the notification for 10 seconds
