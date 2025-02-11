@@ -1,4 +1,16 @@
-chrome.alarms.onAlarm.addListener(function (alarm) {
+async function ensureOffscreenDocument() {
+    const existingContexts = await chrome.runtime.getContexts({ contextTypes: ["OFFSCREEN_DOCUMENT"] });
+
+    if (existingContexts.length === 0) {
+        await chrome.offscreen.createDocument({
+            url: "offscreen.html",
+            reasons: ["AUDIO_PLAYBACK"],
+            justification: "Play notification sounds for task reminders"
+        });
+    }
+}
+
+chrome.alarms.onAlarm.addListener(async function (alarm) {
     chrome.notifications.create({
         type: "basic",
         iconUrl: "icons/icon128.png",
@@ -7,9 +19,11 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
         priority: 2
     });
 
-    // Play the notification sound
-    const audio = new Audio("assets/audio/notification.mp3");
-    audio.play();
+    // Ensure the offscreen document exists
+    await ensureOffscreenDocument();
+
+    // Send a message to the offscreen document to play the sound
+    chrome.runtime.sendMessage({ type: "play-sound" });
 
     // Remove the completed task
     chrome.storage.sync.get(["tasks"], function (result) {
