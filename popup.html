@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
     <title>Task Reminder</title>
 </head>
 <body>
-    <h1 class="text-xl font-bold text-gray-800 mb-4">Task Reminder</h1>
-    <div>
-        <input id="task" type="text" placeholder="Enter task..." class="w-full p-2 border rounded mb-2">
-        <input id="time" type="datetime-local" class="w-full p-2 border rounded mb-2">
-        <button id="addTask" class="w-full bg-blue-500 text-white p-2 rounded">Add Task</button>
+    <div class="container">
+        <h1>Task Reminder</h1>
+        <div>
+            <input id="task" type="text" placeholder="Enter task...">
+            <input id="time" type="datetime-local">
+            <button id="addTask">Add Task</button>
+        </div>
+        <ul id="taskList"></ul>
     </div>
-    <ul id="taskList" class="mt-4"></ul>
+    
     <script src="popup.js"></script>
 </body>
 </html>
