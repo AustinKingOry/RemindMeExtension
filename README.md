@@ -15,7 +15,7 @@ This Chrome extension allows users to create tasks and set reminders. When the t
 1. **Download or Clone the Repository**
    ```sh
    git clone https://github.com/AustinKingOry/RemindMeExtension.git
-   cd task-reminder-extension
+   cd RemindMeExtension
    ```
 
 2. **Open Chrome Extensions Page**
@@ -34,6 +34,8 @@ This Chrome extension allows users to create tasks and set reminders. When the t
  ├── styles.css      # Additional custom styling (if needed)
  ├── popup.html      # Popup UI
  ├── manifest.json   # Chrome extension configuration
+ ├── offscreen.html # Offscreen document for handling audio playback
+ ├── offscreen.js   # Logic for playing custom notification sounds
  ├── README.md       # Project documentation
 
 ## Usage
