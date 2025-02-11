@@ -24,10 +24,8 @@
             "matches": ["<all_urls>"]
         }
     ],
-    "action": {
-        "default_icon": {
-            "default_icon": "icons/icon128.png"
-        },
+    "action": {        
+        "default_icon": "icons/icon128.png",
         "default_title": "Tasks Reminder",
         "default_popup":"popup.html"
     },
