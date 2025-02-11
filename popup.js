@@ -17,7 +17,22 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    
+    addTaskBtn.addEventListener("click", function () {
+        const task = taskInput.value.trim();
+        const time = timeInput.value;
+        if (!task || !time) return;
+
+        chrome.storage.sync.get(["tasks"], function (result) {
+            const tasks = result.tasks || [];
+            tasks.push({ name: task, time: time });
+            chrome.storage.sync.set({ tasks }, function () {
+                chrome.alarms.create(task, { when: new Date(time).getTime() });
+                loadTasks();
+                taskInput.value = "";
+                timeInput.value = "";
+            });
+        });
+    });
 
     loadTasks();
 });
