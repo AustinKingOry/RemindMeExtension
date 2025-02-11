@@ -6,7 +6,11 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
         message: `Time for: ${alarm.name}`,
         priority: 2
     });
-    
+
+    // Play the notification sound
+    const audio = new Audio("assets/audio/notification.mp3");
+    audio.play();
+
     // Remove the completed task
     chrome.storage.sync.get(["tasks"], function (result) {
         const tasks = result.tasks || [];
