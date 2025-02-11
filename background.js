@@ -11,7 +11,8 @@ async function ensureOffscreenDocument() {
 }
 
 chrome.alarms.onAlarm.addListener(async function (alarm) {
-    chrome.notifications.create({
+    const notificationId = `task-${Date.now()}`;
+    chrome.notifications.create(notificationId, {
         type: "basic",
         iconUrl: "icons/icon128.png",
         title: "Task Reminder",
@@ -19,6 +20,10 @@ chrome.alarms.onAlarm.addListener(async function (alarm) {
         priority: 2
     });
 
+     // Keep the notification for 10 seconds
+     setTimeout(() => {
+        chrome.notifications.clear(notificationId);
+    }, 10000);
     // Ensure the offscreen document exists
     await ensureOffscreenDocument();
 
