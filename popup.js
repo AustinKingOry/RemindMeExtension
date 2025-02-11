@@ -34,5 +34,19 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    taskList.addEventListener("click", function (event) {
+        if (event.target.classList.contains("delete-btn")) {
+            const index = event.target.getAttribute("data-index");
+            chrome.storage.sync.get(["tasks"], function (result) {
+                const tasks = result.tasks || [];
+                const [removedTask] = tasks.splice(index, 1);
+                chrome.storage.sync.set({ tasks }, function () {
+                    chrome.alarms.clear(removedTask.name);
+                    loadTasks();
+                });
+            });
+        }
+    });
+
     loadTasks();
 });
