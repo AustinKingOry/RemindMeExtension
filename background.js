@@ -57,11 +57,15 @@ chrome.alarms.onAlarm.addListener(async function (alarm) {
     await ensureOffscreenDocument();
     chrome.runtime.sendMessage({ type: "play-sound" });
 
-    // Remove the completed task
-    chrome.storage.sync.get(["tasks"], function (result) {
-        const tasks = result.tasks || [];
-        const updatedTasks = tasks.filter(task => task.name !== alarm.name);
-        chrome.storage.sync.set({ tasks: updatedTasks });
+    // Check user settings before deleting the task
+    chrome.storage.sync.get(["keepHistory"], function (data) {
+        if (!data.keepHistory) {
+            chrome.storage.sync.get(["tasks"], function (result) {
+                const tasks = result.tasks || [];
+                const updatedTasks = tasks.filter(task => task.name !== alarm.name);
+                chrome.storage.sync.set({ tasks: updatedTasks });
+            });
+        }
     });
 });
 
