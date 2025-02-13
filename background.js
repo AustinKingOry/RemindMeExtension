@@ -55,7 +55,27 @@ chrome.alarms.onAlarm.addListener(async function (alarm) {
 
     // Ensure offscreen document exists for sound playback
     await ensureOffscreenDocument();
-    chrome.runtime.sendMessage({ type: "play-sound" });
+    // Retrieve the user's selected sound
+    chrome.storage.sync.get(["notificationSound"], function (data) {
+        let soundFile = "notification.mp3"; // Default sound file
+
+        switch (data.notificationSound) {
+            case "Alert":
+                soundFile = "Alert.mp3";
+                break;
+            case "Computer":
+                soundFile = "Computer.mp3";
+                break;
+            case "Guitar":
+                soundFile = "Guitar.mp3";
+                break;
+            case "Mute":
+                return; // Do not play any sound
+        }
+
+        // Send message to offscreen document to play the selected sound
+        chrome.runtime.sendMessage({ type: "play-sound", sound: soundFile });
+    });
 
     // Check user settings before deleting the task
     chrome.storage.sync.get(["keepHistory"], function (data) {
