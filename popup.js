@@ -18,19 +18,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     addTaskBtn.addEventListener("click", function () {
-        const task = taskInput.value.trim();
-        const time = timeInput.value;
-        if (!task || !time) return;
+        const taskName = taskInput.value.trim();
+        const taskTime = timeInput.value;
+        if (!taskName || !taskTime) return;
 
-        chrome.storage.sync.get(["tasks"], function (result) {
-            const tasks = result.tasks || [];
-            tasks.push({ name: task, time: time });
-            chrome.storage.sync.set({ tasks }, function () {
-                chrome.alarms.create(task, { when: new Date(time).getTime() });
+        const taskTimestamp = new Date(taskTime).getTime();
+        if (taskTimestamp <= Date.now()) {
+            alert("Please select a future time.");
+            return;
+        }
+
+        const task = { name: taskName, time: taskTimestamp };
+
+        // Send message to background.js to schedule the task
+        chrome.runtime.sendMessage({ type: "schedule-task", task }, function (response) {
+            if (response.success) {
                 loadTasks();
                 taskInput.value = "";
                 timeInput.value = "";
-            });
+            }
         });
     });
 
