@@ -64,3 +64,11 @@ chrome.alarms.onAlarm.addListener(async function (alarm) {
         chrome.storage.sync.set({ tasks: updatedTasks });
     });
 });
+
+// Listen for messages from popup.js
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === "schedule-task") {
+        scheduleReminder(message.task);
+        sendResponse({ success: true });
+    }
+});
