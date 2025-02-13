@@ -14,7 +14,7 @@
                 "assets/trash.svg",
                 "assets/play.svg",
                 "assets/pause.svg",
-                "assets/audio/notification.mp3"
+                "assets/audio/*.mp3"
             ],
             "matches": ["<all_urls>"]
         }
