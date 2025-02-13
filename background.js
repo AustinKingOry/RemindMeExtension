@@ -1,3 +1,4 @@
+// Ensure an offscreen document exists for audio playback
 async function ensureOffscreenDocument() {
     const existingContexts = await chrome.runtime.getContexts({ contextTypes: ["OFFSCREEN_DOCUMENT"] });
 
@@ -10,6 +11,32 @@ async function ensureOffscreenDocument() {
     }
 }
 
+// Function to schedule a reminder and store it in storage
+function scheduleReminder(task) {
+    chrome.alarms.create(task.name, { when: task.time });
+
+    chrome.storage.sync.get(["tasks"], function (result) {
+        const tasks = result.tasks || [];
+        const updatedTasks = [...tasks, task];
+        chrome.storage.sync.set({ tasks: updatedTasks });
+    });
+}
+
+// Restore reminders when Chrome starts
+chrome.runtime.onStartup.addListener(() => {
+    chrome.storage.sync.get(["tasks"], function (result) {
+        const tasks = result.tasks || [];
+        const now = Date.now();
+
+        tasks.forEach((task) => {
+            if (task.time > now) {
+                chrome.alarms.create(task.name, { when: task.time });
+            }
+        });
+    });
+});
+
+// Handle alarm triggers
 chrome.alarms.onAlarm.addListener(async function (alarm) {
     const notificationId = `task-${Date.now()}`;
     chrome.notifications.create(notificationId, {
@@ -21,14 +48,13 @@ chrome.alarms.onAlarm.addListener(async function (alarm) {
         silent: true
     });
 
-     // Keep the notification for 10 seconds
-     setTimeout(() => {
+    // Keep the notification for 10 seconds
+    setTimeout(() => {
         chrome.notifications.clear(notificationId);
     }, 10000);
-    // Ensure the offscreen document exists
-    await ensureOffscreenDocument();
 
-    // Send a message to the offscreen document to play the sound
+    // Ensure offscreen document exists for sound playback
+    await ensureOffscreenDocument();
     chrome.runtime.sendMessage({ type: "play-sound" });
 
     // Remove the completed task
