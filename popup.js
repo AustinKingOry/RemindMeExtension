@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const timeInput = document.getElementById("time");
     const addTaskBtn = document.getElementById("addTask");
     const taskList = document.getElementById("taskList");
+    const settingsButton = document.getElementById("openSettings");
 
     function loadTasks() {
         chrome.storage.sync.get(["tasks"], function (result) {
@@ -16,6 +17,10 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     }
+
+    settingsButton.addEventListener("click", function () {
+        chrome.tabs.create({ url: "settings.html" });
+    });
 
     addTaskBtn.addEventListener("click", function () {
         const taskName = taskInput.value.trim();
