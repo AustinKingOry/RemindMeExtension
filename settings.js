@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const keepHistoryCheckbox = document.getElementById("keepHistory");
     const notificationSoundSelect = document.getElementById("notificationSound");
     const saveSettingsBtn = document.getElementById("saveSettings");
+    const previewSoundBtn = document.getElementById("previewSound");
 
      // Load stored settings and apply defaults based on existing data
      chrome.storage.sync.get(["keepHistory", "notificationSound"], function (data) {
@@ -26,5 +27,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }, function () {
             alert("Settings saved!");
         });
+    });
+
+    // Play selected sound when "Preview" is clicked
+    previewSoundBtn.addEventListener("click", function () {
+        let selectedSound = notificationSoundSelect.value;
+        if (selectedSound === "Mute") return; // Don't play anything if "Mute" is selected
+        if(selectedSound == "Default") selectedSound = "notification"
+
+        const audio = new Audio(chrome.runtime.getURL(`assets/audio/${selectedSound}.mp3`));
+        audio.play().catch(err => console.error("Audio play error:", err));
     });
 });
