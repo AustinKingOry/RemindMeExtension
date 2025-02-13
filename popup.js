@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", function () {
         // Send message to background.js to schedule the task
         chrome.runtime.sendMessage({ type: "schedule-task", task }, function (response) {
             if (response.success) {
-                loadTasks();
                 taskInput.value = "";
                 timeInput.value = "";
             }
@@ -51,6 +50,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     loadTasks();
                 });
             });
+        }
+    });
+
+    // Listen for changes in storage and reload tasks dynamically
+    chrome.storage.onChanged.addListener(function (changes, namespace) {
+        if (namespace === "sync" && changes.tasks) {
+            loadTasks();
         }
     });
 
